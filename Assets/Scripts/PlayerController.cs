@@ -20,6 +20,18 @@ public class PlayerController : MonoBehaviour
 
   public ClientControlState clientControlState;
 
+  public void UpdateFromServer(ServerCharacter character)
+  {
+    Vector3 newPosition = new Vector3(
+      character.position.x,
+      this.transform.position.y,
+      character.position.y
+    );
+    Vector3 direction = newPosition - this.transform.position;
+    if (Vector3.Angle(direction, model.forward) > 20f) model.LookAt(model.position + direction, Vector3.up);
+    this.transform.position = newPosition;
+  }
+
   // Use this for initialization
   void Start()
   {
@@ -44,31 +56,12 @@ public class PlayerController : MonoBehaviour
 
   void HandleMovement()
   {
-    Vector3 forward = Vector3.ProjectOnPlane(playerCamera.transform.up, terrain.transform.up).normalized * speed * Time.deltaTime;
-    Vector3 direction = Vector3.zero;
     clientControlState = new ClientControlState();
-    if (Input.GetKey("w"))
-    {
-      direction += forward;
-      clientControlState.moveUp = true;
-    }
-    if (Input.GetKey("a"))
-    {
-      direction += new Vector3(-forward.z, forward.y, forward.x);
-      clientControlState.moveLeft = true;
-    }
-    if (Input.GetKey("s"))
-    {
-      direction += new Vector3(-forward.x, forward.y, -forward.z);
-      clientControlState.moveDown = true;
-    }
-    if (Input.GetKey("d"))
-    {
-      direction += new Vector3(forward.z, forward.y, -forward.x);
-      clientControlState.moveRight = true;
-    }
-    transform.Translate(direction);
-    if (!direction.Equals(Vector3.zero)) model.LookAt(model.position + direction, Vector3.up);
+    if (Input.GetKey("w")) clientControlState.moveUp = true;
+    if (Input.GetKey("a")) clientControlState.moveLeft = true;
+    if (Input.GetKey("s")) clientControlState.moveDown = true;
+    if (Input.GetKey("d")) clientControlState.moveRight = true;
+    // if (!direction.Equals(Vector3.zero)) model.LookAt(model.position + direction, Vector3.up);
   }
 
   void HandleUI()

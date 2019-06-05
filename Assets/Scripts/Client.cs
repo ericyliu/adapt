@@ -38,6 +38,7 @@ public class Client : MonoBehaviour
       client.Connect(remoteEp);
       Debug.Log("Successfully connected to server");
       StartCoroutine(this.SendClientControlState());
+      StartCoroutine(this.ReceiveCharacterState());
     }
     catch (Exception e)
     {
@@ -59,8 +60,24 @@ public class Client : MonoBehaviour
   {
     byte[] msg = playerController.clientControlState.toByteArray();
     client.Send(msg);
-    yield return new WaitForSeconds(.050F);
+    yield return new WaitForSeconds(.01f);
     StartCoroutine(SendClientControlState());
+  }
+
+  IEnumerator ReceiveCharacterState()
+  {
+    while (true)
+    {
+      if (this.client == null)
+      {
+        break;
+      }
+      byte[] bytes = new byte[1024];
+      this.client.Receive(bytes);
+      ServerCharacter character = new ServerCharacter(bytes);
+      this.playerController.UpdateFromServer(character);
+      yield return new WaitForSeconds(.01f);
+    }
   }
 }
 
