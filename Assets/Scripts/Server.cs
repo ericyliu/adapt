@@ -35,7 +35,7 @@ public class Server
       {
         bytes = new byte[1024];
         handler.Receive(bytes);
-        Debug.Log("Server Recieved: " + BitConverter.ToInt32(bytes, 0));
+        Debug.Log("Server Recieved: " + new ClientControlState(bytes).ToString());
         handler.Send(bytes);
         if (BitConverter.ToInt32(bytes, 0) == 9999)
         {

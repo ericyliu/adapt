@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
   public Transform model;
   public Text score;
 
+  public ClientControlState clientControlState;
+
   // Use this for initialization
   void Start()
   {
@@ -44,10 +46,27 @@ public class PlayerController : MonoBehaviour
   {
     Vector3 forward = Vector3.ProjectOnPlane(playerCamera.transform.up, terrain.transform.up).normalized * speed * Time.deltaTime;
     Vector3 direction = Vector3.zero;
-    if (Input.GetKey("w")) direction += forward;
-    if (Input.GetKey("a")) direction += new Vector3(-forward.z, forward.y, forward.x);
-    if (Input.GetKey("s")) direction += new Vector3(-forward.x, forward.y, -forward.z);
-    if (Input.GetKey("d")) direction += new Vector3(forward.z, forward.y, -forward.x);
+    clientControlState = new ClientControlState();
+    if (Input.GetKey("w"))
+    {
+      direction += forward;
+      clientControlState.moveUp = true;
+    }
+    if (Input.GetKey("a"))
+    {
+      direction += new Vector3(-forward.z, forward.y, forward.x);
+      clientControlState.moveLeft = true;
+    }
+    if (Input.GetKey("s"))
+    {
+      direction += new Vector3(-forward.x, forward.y, -forward.z);
+      clientControlState.moveDown = true;
+    }
+    if (Input.GetKey("d"))
+    {
+      direction += new Vector3(forward.z, forward.y, -forward.x);
+      clientControlState.moveRight = true;
+    }
     transform.Translate(direction);
     if (!direction.Equals(Vector3.zero)) model.LookAt(model.position + direction, Vector3.up);
   }
