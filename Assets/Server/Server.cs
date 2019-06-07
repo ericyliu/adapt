@@ -25,7 +25,7 @@ public class Server
 
   void ReceiveConnection()
   {
-    IPHostEntry host = Dns.GetHostEntry("0.0.0.0");
+    IPHostEntry host = Dns.GetHostEntry(IPAddress.Any.ToString());
     IPAddress ipAddress = host.AddressList[0];
     IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
     try
