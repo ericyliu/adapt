@@ -8,6 +8,7 @@ using UnityEngine;
 public class Client : MonoBehaviour
 {
   public PlayerController playerController;
+  public Game game;
   Socket client;
 
   // Start is called before the first frame update
@@ -27,7 +28,7 @@ public class Client : MonoBehaviour
     yield return new WaitForSeconds(1);
     byte[] bytes = new byte[1024];
 
-    IPHostEntry host = Dns.GetHostEntry("localhost");
+    IPHostEntry host = Dns.GetHostEntry(game.targetServer == TargetServer.Local ? "localhost" : "104.196.10.129");
     IPAddress ipAddress = host.AddressList[0];
     IPEndPoint remoteEp = new IPEndPoint(ipAddress, 11000);
 
@@ -35,6 +36,7 @@ public class Client : MonoBehaviour
 
     try
     {
+      Debug.Log("Connecting to server...");
       client.Connect(remoteEp);
       Debug.Log("Successfully connected to server");
       StartCoroutine(this.SendClientControlState());
@@ -42,7 +44,7 @@ public class Client : MonoBehaviour
     }
     catch (Exception e)
     {
-      if (e.Message == "No connection could be made because the target machine actively refused it.")
+      if (e.Message.IndexOf("No connection could be made because the target machine actively refused it.") > -1)
       {
         Debug.Log("Reconnecting in 1s");
         StartCoroutine(this.Connect());

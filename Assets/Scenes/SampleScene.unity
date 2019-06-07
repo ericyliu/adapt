@@ -1180,6 +1180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0d1c98a00898f4c944ef089cf91282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetServer: 1
 --- !u!4 &691859280
 Transform:
   m_ObjectHideFlags: 0
@@ -1207,6 +1208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 790375991}
+  game: {fileID: 691859279}
 --- !u!1 &764272408
 GameObject:
   m_ObjectHideFlags: 0

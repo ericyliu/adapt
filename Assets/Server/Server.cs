@@ -25,7 +25,7 @@ public class Server
 
   void ReceiveConnection()
   {
-    IPHostEntry host = Dns.GetHostEntry("localhost");
+    IPHostEntry host = Dns.GetHostEntry("0.0.0.0");
     IPAddress ipAddress = host.AddressList[0];
     IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
     try
@@ -42,6 +42,7 @@ public class Server
     }
     catch (Exception e)
     {
+      Console.WriteLine(e);
       if (handler != null)
       {
         handler.Shutdown(SocketShutdown.Both);
