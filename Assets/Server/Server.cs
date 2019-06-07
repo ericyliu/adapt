@@ -8,11 +8,13 @@ using UnityEngine;
 
 public class Server
 {
+  static bool isRealServer = false;
   Socket handler;
   ServerCharacter character = new ServerCharacter();
 
   static void Main()
   {
+    Server.isRealServer = true;
     (new Server()).StartServer();
   }
 
@@ -25,7 +27,7 @@ public class Server
 
   void ReceiveConnection()
   {
-    IPHostEntry host = Dns.GetHostEntry(IPAddress.Any.ToString());
+    IPHostEntry host = Dns.GetHostEntry(Server.isRealServer ? Dns.GetHostName() : "localhost");
     IPAddress ipAddress = host.AddressList[0];
     IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
     try
