@@ -18,7 +18,7 @@ public class Server
 
   public void StartServer()
   {
-    Debug.Log("Starting the server");
+    Console.WriteLine("Starting the server");
     Thread thread = new Thread(new ThreadStart(this.ReceiveConnection));
     thread.Start();
   }
@@ -33,9 +33,9 @@ public class Server
       Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
       listener.Bind(localEndPoint);
       listener.Listen(10);
-      Debug.Log("Waiting for a connection...");
+      Console.WriteLine("Waiting for a connection...");
       this.handler = listener.Accept();
-      Debug.Log("Connection Received");
+      Console.WriteLine("Connection Received");
       new Thread(new ThreadStart(this.ListenForClientControlState)).Start();
       new Thread(new ThreadStart(this.PublishCharacterState)).Start();
 
