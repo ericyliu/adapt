@@ -11,6 +11,10 @@ public class Server
   Socket handler;
   ServerCharacter character = new ServerCharacter();
 
+  static void Main()
+  {
+    (new Server()).StartServer();
+  }
 
   public void StartServer()
   {
@@ -143,4 +147,50 @@ public class ServerCharacter
     return BitConverter.GetBytes(Convert.ToInt16(f * 100f));
   }
 
+}
+
+public class ClientControlState
+{
+  public bool moveLeft = false;
+  public bool moveRight = false;
+  public bool moveUp = false;
+  public bool moveDown = false;
+
+  public ClientControlState(bool moveLeft = false, bool moveRight = false, bool moveUp = false, bool moveDown = false)
+  {
+    this.moveLeft = moveLeft;
+    this.moveRight = moveRight;
+    this.moveUp = moveUp;
+    this.moveDown = moveDown;
+  }
+
+  public ClientControlState(byte[] raw)
+  {
+    this.moveLeft = (raw[0] & 1) == 1 ? true : false;
+    this.moveRight = ((raw[0] >> 1) & 1) == 1 ? true : false;
+    this.moveUp = ((raw[0] >> 2) & 1) == 1 ? true : false;
+    this.moveDown = ((raw[0] >> 3) & 1) == 1 ? true : false;
+  }
+
+  public byte[] toByteArray()
+  {
+    var array = new byte[1];
+    byte b = 0;
+    if (this.moveLeft) b++;
+    if (this.moveRight) b += 2;
+    if (this.moveUp) b += 4;
+    if (this.moveDown) b += 8;
+    array[0] = b;
+    return array;
+  }
+
+  public override string ToString()
+  {
+    return "[" +
+      this.moveLeft + "," +
+      this.moveRight + "," +
+      this.moveUp + "," +
+      this.moveDown +
+    "]";
+  }
 }
