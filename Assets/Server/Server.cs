@@ -38,8 +38,6 @@ public class Server
     }
     catch (Exception e)
     {
-      Debug.Log(e);
-      Console.WriteLine(e);
       if (handler != null)
       {
         handler.Shutdown(SocketShutdown.Both);
