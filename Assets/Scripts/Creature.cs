@@ -13,6 +13,7 @@ public class Creature : MonoBehaviour
   public float health = 100f;
   public float maxHealth = 100f;
   public float baseHealth = 100f;
+  public bool tookDamage = false;
   // Start is called before the first frame update
   void Start()
   {
@@ -45,5 +46,24 @@ public class Creature : MonoBehaviour
       fury++;
     }
     GameObject.Destroy(other.gameObject);
+  }
+
+  public void TakeDamage(int damage)
+  {
+    if (this.tookDamage) return;
+    health -= damage;
+    if (health <= 0)
+    {
+      GameObject.Destroy(this.gameObject);
+      return;
+    }
+    this.tookDamage = true;
+    StartCoroutine("ResetTookDamage");
+  }
+
+  IEnumerator ResetTookDamage()
+  {
+    yield return new WaitForSeconds(2);
+    this.tookDamage = false;
   }
 }
